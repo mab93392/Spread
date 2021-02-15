@@ -29,3 +29,4 @@ def teams_setup():
         cur.execute("INSERT INTO teams(team_id,team_abv) VALUES(%s,'%s')" % (id,name))
 
     NHL_Data.commit()
+
