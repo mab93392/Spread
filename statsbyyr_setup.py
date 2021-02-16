@@ -14,7 +14,7 @@ def statsbyyr_setup():
     cur = NHL_Data.cursor()
 
     # pulls data from team table
-    cur.execute('SELECT * FROM teams')
+    cur.execute("SELECT * FROM teams WHERE team_abv !='VGK'")
     team_list = cur.fetchall()
 
     # makes column statement for table creation
@@ -30,17 +30,19 @@ def statsbyyr_setup():
     for team in team_list:
         team_abv = team[1]
         team_id = team[0]
-        yr0_1 = 2017
-        yr0_2 = 2018
+        yr0_1 = 2014
+        yr0_2 = 2015
+
 
         # creates team table 
         cur.execute('CREATE TABLE ' + team_abv + ' (' + col_nme + ')' )
-
+        print(team_abv)
+        print(team_id)
         # populates table by season
-        for i in range(0,2):
-            yr_1 = str(yr0_1 + i)
-            yr_2 = str(yr0_2 + i)
-            sn = yr_1 + yr_2
+        for i in range(0,3):
+            yr_1 = yr0_1 + i
+            yr_2 = yr0_2 + i
+            sn = str(yr_1) + str(yr_2)
 
             # pulls and organizes data
             url = 'https://statsapi.web.nhl.com/api/v1/teams/' + str(team_id) + '/stats?statsSingleseaon&season=' + sn
@@ -60,8 +62,9 @@ def statsbyyr_setup():
 
             # inserts values
             cur.execute('INSERT INTO ' + str(team_abv) + ' (' + col_stmt + ') VALUES (' + val_stmt + ')')
+            NHL_Data.commit()
+      
 
 
 
-
-
+statsbyyr_setup()
