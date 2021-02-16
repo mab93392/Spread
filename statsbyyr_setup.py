@@ -67,4 +67,3 @@ def statsbyyr_setup():
 
 
 
-statsbyyr_setup()
