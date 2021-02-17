@@ -14,11 +14,11 @@ def playoff_scores_setup():
     cur = NHL_Data.cursor()
 
     # creates table
-    col_stmt = '(game_id INT, home_id INT, home_points INT, away_id INT, away_points INT)'
+    col_stmt = '(game_id INT, home_id VARCHAR(5), home_points INT, away_id VARCHAR(5), away_points INT)'
     cur.execute('CREATE TABLE playoff_scores ' + col_stmt)
 
     # for each year
-    for i in range(0,3): # 3 yrs
+    for i in range(0,3): # 2 yrs
         yr = 2014 + i
         
         # for each matchup
@@ -47,3 +47,6 @@ def playoff_scores_setup():
                 vals = ('(%s, %s, %s, %s, %s)') % (game_id,hm_tm,hm_pts,a_tm,a_pts)
                 cur.execute('INSERT INTO playoff_scores ' + col_names + ' VALUES ' + vals)
                 NHL_Data.commit()
+
+
+
