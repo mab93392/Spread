@@ -91,5 +91,4 @@ def mvlr(dep_var,ind_var,alpha):
 
     return [np.append(coeff,MoE,1),err_stats]
 
-y = [21,21,22.8,21.4,18.7,18.1]
-cyl = [6,6,4,6,8,6]
+
