@@ -57,12 +57,12 @@ def mvlr(dep_var,ind_var,alpha):
             x_err = np.vstack((x_err,x_err_row))
         
     err = dep_var - np.dot(x_err,coeff) 
-    # starts S calculation
-    e_sum = 0
+        # starts SSE calculation
+    SSE = 0
     for i in range(0,D):
-        e_sum = e_sum + np.power(err[i],2)
+        SSE = SSE + np.power(err[i],2)
 
-    S = np.power(e_sum/(D - (W + 1)),0.5)
+    S = np.power(SSE/(D - (W + 1)),0.5)
     t = scipy.stats.t.ppf(1-alpha/2,D-W)
     MoE = []
     for i in range(0,len(coeff)):
@@ -72,6 +72,24 @@ def mvlr(dep_var,ind_var,alpha):
     # final output
     coeff = np.reshape(coeff,(len(coeff),1))
     MoE = np.reshape(MoE,(len(MoE),1))
-    
-    return np.append(coeff,MoE,1)
 
+        # R squared calculation
+    y_bar = np.average(dep_var)
+    SSM = 0
+
+    for i in range(0,D):
+        SSM = SSM + np.power(dep_var[i]-y_bar,2) # sum of squares total
+    
+    Rsqr = 1 - SSE/SSM
+    
+        # F calculation
+    pfit = len(coeff)
+    F = ((SSM-SSE)/(pfit-1))/(SSE/(D-pfit))
+    err_stats = [['RS:',Rsqr],
+                 ['F:',F]]
+
+
+    return [np.append(coeff,MoE,1),err_stats]
+
+y = [21,21,22.8,21.4,18.7,18.1]
+cyl = [6,6,4,6,8,6]
